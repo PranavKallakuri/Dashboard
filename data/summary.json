@@ -1,0 +1,48 @@
+{
+  "generated_at": "2026-07-09",
+  "data_sources": [
+    "Open Banking (GoCardless Bank Account Data API) — personal transactions",
+    "data.gov.uk — local council spend over £500"
+  ],
+  "totals": {
+    "income": 3204.50,
+    "expenses": 2481.16,
+    "net": 723.34,
+    "transactions_analyzed": 184
+  },
+  "monthly": [
+    { "month": "Feb 2026", "income": 1010.00, "expenses": 845.20 },
+    { "month": "Mar 2026", "income": 1045.50, "expenses": 792.60 },
+    { "month": "Apr 2026", "income": 1030.00, "expenses": 858.40 },
+    { "month": "May 2026", "income": 1080.00, "expenses": 810.10 },
+    { "month": "Jun 2026", "income": 1070.00, "expenses": 869.30 },
+    { "month": "Jul 2026", "income": 1120.00, "expenses": 796.90 }
+  ],
+  "forecast": {
+    "next_month_label": "Aug 2026",
+    "forecast_income": 1090.00,
+    "forecast_expenses": 825.43,
+    "method": "3-month trailing average"
+  },
+  "budget_categories": [
+    { "name": "Income",        "type": "income",  "fixed": false, "budget": 3100.00, "actual": 3204.50 },
+    { "name": "Rent",          "type": "expense", "fixed": true,  "budget": 650.00,  "actual": 650.00 },
+    { "name": "Groceries",     "type": "expense", "fixed": false, "budget": 280.00,  "actual": 312.40 },
+    { "name": "Transport",     "type": "expense", "fixed": false, "budget": 110.00,  "actual": 96.20 },
+    { "name": "Subscriptions", "type": "expense", "fixed": false, "budget": 45.00,   "actual": 42.50 },
+    { "name": "Other",         "type": "expense", "fixed": false, "budget": 150.00,  "actual": 180.90 }
+  ],
+  "supplier_spend": {
+    "top_suppliers": [
+      { "name": "Supplier A — Facilities", "amount": 4820.00 },
+      { "name": "Supplier B — IT Services", "amount": 3210.00 },
+      { "name": "Supplier C — Consultancy", "amount": 2470.00 },
+      { "name": "Supplier D — Utilities", "amount": 1890.00 },
+      { "name": "Supplier E — Office Supplies", "amount": 1305.00 }
+    ],
+    "total_spend": 18915.00,
+    "total_suppliers": 47,
+    "top5_concentration_pct": 61.8
+  },
+  "commentary": "Income tracked slightly ahead of budget this month, driven by consistent freelance receipts. Groceries and other discretionary spend ran about 12% over budget \u2014 worth watching if the trend continues into August. Transport came in under budget following fewer rail journeys. Supplier spend remains fairly concentrated: the top 5 suppliers account for over 60% of total spend, which is a concentration risk worth flagging even at this small scale."
+}
