@@ -32,7 +32,7 @@ function chartOptions() {
 }
 
 async function loadDashboard() {
-  const res = await fetch("data/summary.json");
+  const res = await fetch("data/summary.json?v=" + Date.now());
   const data = await res.json();
   const latest = data.yearly_data[data.yearly_data.length - 1];
 
