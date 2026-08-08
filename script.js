@@ -1,28 +1,19 @@
-// ---------------------------------------------------------
-// Loads data/summary.json (written by scripts/analyze.py)
-// and renders every number, chart and interactive element
-// on the page from it. Nothing here is hard-coded — swap
-// the JSON and the whole dashboard updates.
-// ---------------------------------------------------------
+// Reads data/summary.json (written by scripts/analyze.py) and
+// renders every number and chart on the page from it.
 
-const GBP = (n) => `£${n.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-const SIGNED_GBP = (n) => `${n >= 0 ? "+" : "\u2212"}£${Math.abs(n).toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const usd = (n) => `$${n.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}M`;
+const signedUsd = (n) => `${n >= 0 ? "+" : "\u2212"}$${Math.abs(n).toLocaleString("en-US", { maximumFractionDigits: 0 })}M`;
 
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-let DATA = null; // holds the loaded JSON for the what-if calculator to reuse
 
-function countUp(el, target, prefix = "£") {
-  if (reduceMotion) {
-    el.textContent = prefix + target.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    return;
-  }
+function countUp(el, target, prefix = "$", suffix = "M") {
+  if (reduceMotion) { el.textContent = prefix + Math.round(target).toLocaleString("en-US") + suffix; return; }
   const duration = 1200;
   const start = performance.now();
   function frame(now) {
     const progress = Math.min((now - start) / duration, 1);
     const eased = 1 - Math.pow(1 - progress, 3);
-    const value = target * eased;
-    el.textContent = prefix + value.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    el.textContent = prefix + Math.round(target * eased).toLocaleString("en-US") + suffix;
     if (progress < 1) requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
@@ -32,9 +23,7 @@ function chartOptions() {
   return {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: {
-      legend: { labels: { color: "#a9a89c", font: { family: "IBM Plex Mono", size: 11 } } },
-    },
+    plugins: { legend: { labels: { color: "#a9a89c", font: { family: "IBM Plex Mono", size: 11 } } } },
     scales: {
       x: { ticks: { color: "#a9a89c", font: { family: "IBM Plex Mono", size: 10 } }, grid: { color: "#2a3240" } },
       y: { ticks: { color: "#a9a89c", font: { family: "IBM Plex Mono", size: 10 } }, grid: { color: "#2a3240" } },
@@ -44,141 +33,100 @@ function chartOptions() {
 
 async function loadDashboard() {
   const res = await fetch("data/summary.json");
-  DATA = await res.json();
+  const data = await res.json();
+  const latest = data.yearly_data[data.yearly_data.length - 1];
 
-  renderHero(DATA);
-  renderKpis(DATA);
-  renderCommentary(DATA);
-  renderMonthlyChart(DATA);
-  renderForecastCard(DATA);
-  renderVariance(DATA);
-  renderSuppliers(DATA);
-  setupWhatIf(DATA);
-
-  document.getElementById("sourcesList").innerHTML = DATA.data_sources.map((s) => `<li>${s}</li>`).join("");
-}
-
-function renderHero(data) {
-  countUp(document.getElementById("heroCounter"), data.totals.net);
+  // Hero
+  countUp(document.getElementById("heroCounter"), latest["Net Income"]);
+  document.getElementById("heroYear").textContent = latest.Year;
   document.getElementById("generatedAt").textContent = data.generated_at;
-}
 
-function renderKpis(data) {
-  document.getElementById("kpiIncome").textContent = GBP(data.totals.income);
-  document.getElementById("kpiExpenses").textContent = GBP(data.totals.expenses);
-  document.getElementById("kpiNet").textContent = GBP(data.totals.net);
-  document.getElementById("kpiCount").textContent = data.totals.transactions_analyzed;
-}
+  // KPI cards (latest year)
+  document.getElementById("kpiRevenue").textContent = usd(latest.Revenue);
+  document.getElementById("kpiCos").textContent = usd(latest["Cost of Sales"]);
+  document.getElementById("kpiOpex").textContent = usd(latest["Operating Expenses"]);
+  document.getElementById("kpiOpIncome").textContent = usd(latest["Operating Income"]);
 
-function renderCommentary(data) {
+  // Commentary
   document.getElementById("commentaryText").textContent = data.commentary;
-}
 
-function renderMonthlyChart(data) {
-  new Chart(document.getElementById("monthlyChart"), {
+  // Trend chart — Revenue, Cost of Sales, Operating Expenses across all years
+  new Chart(document.getElementById("trendChart"), {
     type: "bar",
     data: {
-      labels: data.monthly.map((m) => m.month),
+      labels: data.yearly_data.map((y) => y.Year),
       datasets: [
-        { label: "Income", data: data.monthly.map((m) => m.income), backgroundColor: "#3f8f68" },
-        { label: "Expenses", data: data.monthly.map((m) => m.expenses), backgroundColor: "#c1614a" },
+        { label: "Revenue", data: data.yearly_data.map((y) => y.Revenue), backgroundColor: "#c9a15a" },
+        { label: "Cost of Sales", data: data.yearly_data.map((y) => y["Cost of Sales"]), backgroundColor: "#c1614a" },
+        { label: "Operating Expenses", data: data.yearly_data.map((y) => y["Operating Expenses"]), backgroundColor: "#4a5568" },
       ],
     },
     options: chartOptions(),
   });
-}
 
-function renderForecastCard(data) {
-  const f = data.forecast;
-  document.getElementById("forecastLabel").textContent = f.next_month_label;
-  document.getElementById("forecastIncome").textContent = GBP(f.forecast_income);
-  document.getElementById("forecastExpenses").textContent = GBP(f.forecast_expenses);
-  document.getElementById("forecastNet").textContent = GBP(f.forecast_income - f.forecast_expenses);
-  document.getElementById("forecastMethod").textContent = f.method;
-}
-
-function renderVariance(data) {
-  const rows = data.budget_categories;
-
+  // Variance chart + table — Revenue % change year over year
   new Chart(document.getElementById("varianceChart"), {
     type: "bar",
     data: {
-      labels: rows.map((r) => r.name),
+      labels: data.variance.map((v) => `${v.prior_year}\u2192${v.year}`),
       datasets: [
-        { label: "Budget", data: rows.map((r) => r.budget), backgroundColor: "#4a5568" },
-        { label: "Actual", data: rows.map((r) => r.actual), backgroundColor: "#c9a15a" },
+        { label: "Revenue % change", data: data.variance.map((v) => v.Revenue.pct_change), backgroundColor: "#3f8f68" },
+        { label: "Net Income % change", data: data.variance.map((v) => v["Net Income"].pct_change), backgroundColor: "#c9a15a" },
       ],
     },
     options: chartOptions(),
   });
 
   const tbody = document.getElementById("varianceTableBody");
-  rows.forEach((r) => {
-    const variance = r.actual - r.budget;
-    const isIncome = r.type === "income";
-    const favourable = isIncome ? variance >= 0 : variance <= 0;
-    const pct = r.budget !== 0 ? (variance / r.budget) * 100 : 0;
+  data.variance.forEach((v) => {
     const tr = document.createElement("tr");
+    const rev = v.Revenue;
+    const ni = v["Net Income"];
     tr.innerHTML = `
-      <td>${r.name}</td>
-      <td class="amount">${GBP(r.budget)}</td>
-      <td class="amount">${GBP(r.actual)}</td>
-      <td class="amount ${favourable ? "positive" : "negative"}">${SIGNED_GBP(variance)}</td>
-      <td class="amount ${favourable ? "positive" : "negative"}">${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%</td>
+      <td>${v.prior_year} \u2192 ${v.year}</td>
+      <td class="amount">${usd(rev.current)}</td>
+      <td class="amount ${rev.change >= 0 ? "positive" : "negative"}">${signedUsd(rev.change)} (${rev.pct_change >= 0 ? "+" : ""}${rev.pct_change}%)</td>
+      <td class="amount">${usd(ni.current)}</td>
+      <td class="amount ${ni.change >= 0 ? "positive" : "negative"}">${signedUsd(ni.change)} (${ni.pct_change >= 0 ? "+" : ""}${ni.pct_change}%)</td>
     `;
     tbody.appendChild(tr);
   });
-}
 
-function renderSuppliers(data) {
-  const s = data.supplier_spend;
+  // Forecast
+  const f = data.forecast;
+  document.getElementById("forecastLabel").textContent = f.forecast_year;
+  document.getElementById("forecastRevenue").textContent = usd(f.Revenue);
+  document.getElementById("forecastOpIncome").textContent = usd(f["Operating Income"]);
+  document.getElementById("forecastNetIncome").textContent = usd(f["Net Income"]);
+  document.getElementById("forecastMethod").textContent = f.method;
 
-  new Chart(document.getElementById("supplierChart"), {
-    type: "bar",
-    data: {
-      labels: s.top_suppliers.map((x) => x.name),
-      datasets: [{ label: "Spend", data: s.top_suppliers.map((x) => x.amount), backgroundColor: "#c9a15a" }],
-    },
-    options: { ...chartOptions(), indexAxis: "y" },
-  });
-
-  document.getElementById("supplierConcentration").textContent =
-    `Top 5 suppliers account for ${s.top5_concentration_pct}% of ${GBP(s.total_spend)} total spend across ${s.total_suppliers} suppliers.`;
-}
-
-function setupWhatIf(data) {
-  const income = data.totals.income;
-  const fixed = data.budget_categories.filter((c) => c.type === "expense" && c.fixed).reduce((sum, c) => sum + c.actual, 0);
-  const variable = data.budget_categories.filter((c) => c.type === "expense" && !c.fixed).reduce((sum, c) => sum + c.actual, 0);
-  const baseNet = income - fixed - variable;
-
-  const incomeSlider = document.getElementById("incomeSlider");
-  const fixedSlider = document.getElementById("fixedSlider");
-  const variableSlider = document.getElementById("variableSlider");
+  // What-if calculator — based on latest year actuals
+  const baseRevenue = latest.Revenue, baseCos = latest["Cost of Sales"], baseOpex = latest["Operating Expenses"];
+  const baseNet = latest["Net Income"];
+  const revSlider = document.getElementById("revenueSlider");
+  const cosSlider = document.getElementById("cosSlider");
+  const opexSlider = document.getElementById("opexSlider");
 
   function recalc() {
-    const incomeAdj = Number(incomeSlider.value);
-    const fixedAdj = Number(fixedSlider.value);
-    const variableAdj = Number(variableSlider.value);
+    const revAdj = Number(revSlider.value), cosAdj = Number(cosSlider.value), opexAdj = Number(opexSlider.value);
+    const projRevenue = baseRevenue * (1 + revAdj / 100);
+    const projCos = baseCos * (1 + cosAdj / 100);
+    const projOpex = baseOpex * (1 + opexAdj / 100);
+    const projOpIncome = projRevenue - projCos - projOpex;
+    const delta = projOpIncome - (baseRevenue - baseCos - baseOpex);
 
-    const projIncome = income * (1 + incomeAdj / 100);
-    const projFixed = fixed * (1 + fixedAdj / 100);
-    const projVariable = variable * (1 + variableAdj / 100);
-    const projNet = projIncome - projFixed - projVariable;
-    const delta = projNet - baseNet;
-
-    document.getElementById("incomeSliderVal").textContent = `${incomeAdj >= 0 ? "+" : ""}${incomeAdj}%`;
-    document.getElementById("fixedSliderVal").textContent = `${fixedAdj >= 0 ? "+" : ""}${fixedAdj}%`;
-    document.getElementById("variableSliderVal").textContent = `${variableAdj >= 0 ? "+" : ""}${variableAdj}%`;
-
-    document.getElementById("whatIfNet").textContent = GBP(projNet);
+    document.getElementById("revenueSliderVal").textContent = `${revAdj >= 0 ? "+" : ""}${revAdj}%`;
+    document.getElementById("cosSliderVal").textContent = `${cosAdj >= 0 ? "+" : ""}${cosAdj}%`;
+    document.getElementById("opexSliderVal").textContent = `${opexAdj >= 0 ? "+" : ""}${opexAdj}%`;
+    document.getElementById("whatIfResult").textContent = usd(projOpIncome);
     const deltaEl = document.getElementById("whatIfDelta");
-    deltaEl.textContent = `${SIGNED_GBP(delta)} vs current net position`;
+    deltaEl.textContent = `${signedUsd(delta)} vs ${latest.Year} actual`;
     deltaEl.className = delta >= 0 ? "kpi__value positive" : "kpi__value negative";
   }
-
-  [incomeSlider, fixedSlider, variableSlider].forEach((el) => el.addEventListener("input", recalc));
+  [revSlider, cosSlider, opexSlider].forEach((el) => el.addEventListener("input", recalc));
   recalc();
+
+  document.getElementById("dataSource").textContent = data.data_source;
 }
 
 loadDashboard();

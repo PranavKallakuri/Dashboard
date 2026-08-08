@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Management Accounts — Real-Data FP&A Dashboard</title>
+<title>Shell plc — Real-Data FP&A Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css" />
@@ -11,42 +11,46 @@
 <body>
 
 <nav class="nav">
-  <div class="nav__brand">Sai Pranav <span>· Management Accounts</span></div>
+  <div class="nav__brand">Sai Pranav <span>· Shell FP&A</span></div>
   <ul class="nav__links">
     <li><a href="#overview">Overview</a></li>
+    <li><a href="#trend">Trend</a></li>
     <li><a href="#variance">Variance</a></li>
     <li><a href="#forecast">Forecast</a></li>
-    <li><a href="#suppliers">Suppliers</a></li>
     <li><a href="#whatif">What-if</a></li>
   </ul>
 </nav>
 
+<section class="intro">
+  <p>A self-directed management accounting project analysing Shell plc's real 2021-2025 financial statements — built to practice and demonstrate FP&A skills: variance analysis, forecasting, and financial data storytelling using Python.</p>
+</section>
+
 <header class="hero" id="overview">
-  <div class="hero__eyebrow">Real transactions · Open Banking + public spend data</div>
-  <h1 class="hero__title">A management accounts pack built on real money, not sample data</h1>
-  <div class="hero__counter" id="heroCounter">£0.00</div>
-  <div class="hero__sub">Net position this period · last updated <span id="generatedAt"></span></div>
+  <div class="hero__eyebrow">Real financial statements · Shell plc Annual Reports</div>
+  <h1 class="hero__title">Five years of Shell's real financial performance, analysed</h1>
+  <div class="hero__counter" id="heroCounter">$0M</div>
+  <div class="hero__sub">Net Income, FY<span id="heroYear"></span> · last updated <span id="generatedAt"></span></div>
 </header>
 
 <section aria-label="Key figures">
   <div class="section__label">Overview</div>
-  <h2 class="section__title">Where the money moved</h2>
+  <h2 class="section__title">Latest year at a glance</h2>
   <div class="kpi-grid">
     <div class="card">
-      <div class="kpi__label">Income</div>
-      <div class="kpi__value positive" id="kpiIncome">—</div>
+      <div class="kpi__label">Revenue</div>
+      <div class="kpi__value positive" id="kpiRevenue">—</div>
     </div>
     <div class="card">
-      <div class="kpi__label">Expenses</div>
-      <div class="kpi__value negative" id="kpiExpenses">—</div>
+      <div class="kpi__label">Cost of Sales</div>
+      <div class="kpi__value negative" id="kpiCos">—</div>
     </div>
     <div class="card">
-      <div class="kpi__label">Net</div>
-      <div class="kpi__value neutral" id="kpiNet">—</div>
+      <div class="kpi__label">Operating Expenses</div>
+      <div class="kpi__value negative" id="kpiOpex">—</div>
     </div>
     <div class="card">
-      <div class="kpi__label">Transactions analysed</div>
-      <div class="kpi__value neutral" id="kpiCount">—</div>
+      <div class="kpi__label">Operating Income</div>
+      <div class="kpi__value neutral" id="kpiOpIncome">—</div>
     </div>
   </div>
   <div class="card commentary-card">
@@ -55,51 +59,44 @@
   </div>
 </section>
 
-<section aria-label="Monthly cash flow trend">
+<section id="trend" aria-label="5-year trend">
   <div class="section__label">Trend</div>
-  <h2 class="section__title">Monthly cash flow</h2>
-  <div class="chart-card"><canvas id="monthlyChart"></canvas></div>
+  <h2 class="section__title">Revenue, cost of sales &amp; opex, 2021-2025</h2>
+  <div class="chart-card"><canvas id="trendChart"></canvas></div>
 </section>
 
-<section id="variance" aria-label="Budget vs actual variance">
+<section id="variance" aria-label="Year over year variance">
   <div class="section__label">Variance</div>
-  <h2 class="section__title">Budget vs. actual</h2>
+  <h2 class="section__title">Year-over-year change</h2>
   <div class="chart-row">
     <div class="chart-card"><canvas id="varianceChart"></canvas></div>
     <div class="chart-card">
       <table>
-        <thead><tr><th>Category</th><th class="amount">Budget</th><th class="amount">Actual</th><th class="amount">Variance</th><th class="amount">%</th></tr></thead>
+        <thead><tr><th>Period</th><th class="amount">Revenue</th><th class="amount">Δ Revenue</th><th class="amount">Net Income</th><th class="amount">Δ Net Income</th></tr></thead>
         <tbody id="varianceTableBody"></tbody>
       </table>
     </div>
   </div>
 </section>
 
-<section id="forecast" aria-label="Next month forecast">
+<section id="forecast" aria-label="Next year forecast">
   <div class="section__label">Forecast</div>
-  <h2 class="section__title">Next month projection — <span id="forecastLabel"></span></h2>
+  <h2 class="section__title">FY<span id="forecastLabel"></span> projection</h2>
   <div class="kpi-grid">
     <div class="card forecast-card">
-      <div class="kpi__label">Forecast income</div>
-      <div class="kpi__value positive" id="forecastIncome">—</div>
+      <div class="kpi__label">Forecast Revenue</div>
+      <div class="kpi__value positive" id="forecastRevenue">—</div>
     </div>
     <div class="card forecast-card">
-      <div class="kpi__label">Forecast expenses</div>
-      <div class="kpi__value negative" id="forecastExpenses">—</div>
+      <div class="kpi__label">Forecast Operating Income</div>
+      <div class="kpi__value neutral" id="forecastOpIncome">—</div>
     </div>
     <div class="card forecast-card">
-      <div class="kpi__label">Forecast net</div>
-      <div class="kpi__value neutral" id="forecastNet">—</div>
+      <div class="kpi__label">Forecast Net Income</div>
+      <div class="kpi__value neutral" id="forecastNetIncome">—</div>
     </div>
   </div>
   <p class="method-note">Method: <span id="forecastMethod"></span></p>
-</section>
-
-<section id="suppliers" aria-label="Supplier spend concentration">
-  <div class="section__label">Suppliers</div>
-  <h2 class="section__title">Where supplier spend concentrates</h2>
-  <div class="chart-card"><canvas id="supplierChart"></canvas></div>
-  <p class="method-note" id="supplierConcentration"></p>
 </section>
 
 <section id="whatif" aria-label="What-if calculator">
@@ -107,29 +104,29 @@
   <h2 class="section__title">What-if calculator</h2>
   <div class="card whatif-card">
     <div class="slider-row">
-      <label for="incomeSlider">Income <span id="incomeSliderVal">+0%</span></label>
-      <input type="range" id="incomeSlider" min="-20" max="20" value="0" step="1">
+      <label for="revenueSlider">Revenue <span id="revenueSliderVal">+0%</span></label>
+      <input type="range" id="revenueSlider" min="-20" max="20" value="0" step="1">
     </div>
     <div class="slider-row">
-      <label for="fixedSlider">Fixed costs <span id="fixedSliderVal">+0%</span></label>
-      <input type="range" id="fixedSlider" min="-20" max="20" value="0" step="1">
+      <label for="cosSlider">Cost of Sales <span id="cosSliderVal">+0%</span></label>
+      <input type="range" id="cosSlider" min="-20" max="20" value="0" step="1">
     </div>
     <div class="slider-row">
-      <label for="variableSlider">Variable costs <span id="variableSliderVal">+0%</span></label>
-      <input type="range" id="variableSlider" min="-20" max="20" value="0" step="1">
+      <label for="opexSlider">Operating Expenses <span id="opexSliderVal">+0%</span></label>
+      <input type="range" id="opexSlider" min="-20" max="20" value="0" step="1">
     </div>
     <div class="whatif-result">
-      <div class="kpi__label">Projected net position</div>
-      <div class="kpi__value neutral" id="whatIfNet">—</div>
+      <div class="kpi__label">Projected Operating Income</div>
+      <div class="kpi__value neutral" id="whatIfResult">—</div>
       <div class="kpi__value positive" id="whatIfDelta" style="font-size:1rem; margin-top:4px;"></div>
     </div>
   </div>
 </section>
 
 <footer>
-  Data sources:
-  <ul id="sourcesList" style="list-style:none; padding:0; margin-top:8px;"></ul>
-  Built with <code>pandas</code> + <code>Chart.js</code> · hosted on GitHub Pages
+  Data source: <span id="dataSource"></span><br>
+  Built with <code>pandas</code> + <code>Chart.js</code> · hosted on GitHub Pages<br>
+  <p>Built by Sai Pranav Kallakuri — <a href="https://linkedin.com/in/sai-pranav-kallakuri">LinkedIn</a></p>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
