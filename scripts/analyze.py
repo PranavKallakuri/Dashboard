@@ -15,7 +15,7 @@ import pandas as pd
 # "DataFrame", which is just Python's version of a table: rows and
 # columns, same shape as what you see in Excel.
 # ---------------------------------------------------------------
-df = pd.read_csv("data/shell_financials.csv")
+df = pd.read_csv("data/shell_financials.csv",thousands=',')
 df = df.sort_values("Year").reset_index(drop=True)  # make sure years are in order
 
 # The metrics we'll analyse — matching your column names exactly

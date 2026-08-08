@@ -1,48 +1,203 @@
 {
-  "generated_at": "2026-07-09",
-  "data_sources": [
-    "Open Banking (GoCardless Bank Account Data API) — personal transactions",
-    "data.gov.uk — local council spend over £500"
+  "generated_at": "2026-08-08",
+  "data_source": "Shell plc Annual Reports 2021-2025 (manually extracted)",
+  "yearly_data": [
+    {
+      "Year": 2021,
+      "Revenue": 261504.0,
+      "Variable Costs": 174912.0,
+      "Mixed Costs": 23822.0,
+      "Cost of Sales": 198734.0,
+      "Operating Expenses": 40487.0,
+      "Operating Income": 26222.0,
+      "Net Income": 29829.0
+    },
+    {
+      "Year": 2022,
+      "Revenue": 381314.0,
+      "Variable Costs": 258488.0,
+      "Mixed Costs": 25518.0,
+      "Cost of Sales": 284006.0,
+      "Operating Expenses": 34199.0,
+      "Operating Income": 61634.0,
+      "Net Income": 64815.0
+    },
+    {
+      "Year": 2023,
+      "Revenue": 316620.0,
+      "Variable Costs": 212883.0,
+      "Mixed Costs": 25240.0,
+      "Cost of Sales": 238123.0,
+      "Operating Expenses": 47760.0,
+      "Operating Income": 27954.0,
+      "Net Income": 32627.0
+    },
+    {
+      "Year": 2024,
+      "Revenue": 284312.0,
+      "Variable Costs": 188120.0,
+      "Mixed Costs": 23379.0,
+      "Cost of Sales": 211499.0,
+      "Operating Expenses": 42821.0,
+      "Operating Income": 25138.0,
+      "Net Income": 29922.0
+    },
+    {
+      "Year": 2025,
+      "Revenue": 266886.0,
+      "Variable Costs": 177194.0,
+      "Mixed Costs": 21898.0,
+      "Cost of Sales": 199092.0,
+      "Operating Expenses": 40212.0,
+      "Operating Income": 25085.0,
+      "Net Income": 29756.0
+    }
   ],
-  "totals": {
-    "income": 3204.50,
-    "expenses": 2481.16,
-    "net": 723.34,
-    "transactions_analyzed": 184
-  },
-  "monthly": [
-    { "month": "Feb 2026", "income": 1010.00, "expenses": 845.20 },
-    { "month": "Mar 2026", "income": 1045.50, "expenses": 792.60 },
-    { "month": "Apr 2026", "income": 1030.00, "expenses": 858.40 },
-    { "month": "May 2026", "income": 1080.00, "expenses": 810.10 },
-    { "month": "Jun 2026", "income": 1070.00, "expenses": 869.30 },
-    { "month": "Jul 2026", "income": 1120.00, "expenses": 796.90 }
+  "variance": [
+    {
+      "year": 2022,
+      "prior_year": 2021,
+      "Revenue": {
+        "current": 381314.0,
+        "prior": 261504.0,
+        "change": 119810.0,
+        "pct_change": 45.82
+      },
+      "Cost of Sales": {
+        "current": 284006.0,
+        "prior": 198734.0,
+        "change": 85272.0,
+        "pct_change": 42.91
+      },
+      "Operating Expenses": {
+        "current": 34199.0,
+        "prior": 40487.0,
+        "change": -6288.0,
+        "pct_change": -15.53
+      },
+      "Operating Income": {
+        "current": 61634.0,
+        "prior": 26222.0,
+        "change": 35412.0,
+        "pct_change": 135.05
+      },
+      "Net Income": {
+        "current": 64815.0,
+        "prior": 29829.0,
+        "change": 34986.0,
+        "pct_change": 117.29
+      }
+    },
+    {
+      "year": 2023,
+      "prior_year": 2022,
+      "Revenue": {
+        "current": 316620.0,
+        "prior": 381314.0,
+        "change": -64694.0,
+        "pct_change": -16.97
+      },
+      "Cost of Sales": {
+        "current": 238123.0,
+        "prior": 284006.0,
+        "change": -45883.0,
+        "pct_change": -16.16
+      },
+      "Operating Expenses": {
+        "current": 47760.0,
+        "prior": 34199.0,
+        "change": 13561.0,
+        "pct_change": 39.65
+      },
+      "Operating Income": {
+        "current": 27954.0,
+        "prior": 61634.0,
+        "change": -33680.0,
+        "pct_change": -54.65
+      },
+      "Net Income": {
+        "current": 32627.0,
+        "prior": 64815.0,
+        "change": -32188.0,
+        "pct_change": -49.66
+      }
+    },
+    {
+      "year": 2024,
+      "prior_year": 2023,
+      "Revenue": {
+        "current": 284312.0,
+        "prior": 316620.0,
+        "change": -32308.0,
+        "pct_change": -10.2
+      },
+      "Cost of Sales": {
+        "current": 211499.0,
+        "prior": 238123.0,
+        "change": -26624.0,
+        "pct_change": -11.18
+      },
+      "Operating Expenses": {
+        "current": 42821.0,
+        "prior": 47760.0,
+        "change": -4939.0,
+        "pct_change": -10.34
+      },
+      "Operating Income": {
+        "current": 25138.0,
+        "prior": 27954.0,
+        "change": -2816.0,
+        "pct_change": -10.07
+      },
+      "Net Income": {
+        "current": 29922.0,
+        "prior": 32627.0,
+        "change": -2705.0,
+        "pct_change": -8.29
+      }
+    },
+    {
+      "year": 2025,
+      "prior_year": 2024,
+      "Revenue": {
+        "current": 266886.0,
+        "prior": 284312.0,
+        "change": -17426.0,
+        "pct_change": -6.13
+      },
+      "Cost of Sales": {
+        "current": 199092.0,
+        "prior": 211499.0,
+        "change": -12407.0,
+        "pct_change": -5.87
+      },
+      "Operating Expenses": {
+        "current": 40212.0,
+        "prior": 42821.0,
+        "change": -2609.0,
+        "pct_change": -6.09
+      },
+      "Operating Income": {
+        "current": 25085.0,
+        "prior": 25138.0,
+        "change": -53.0,
+        "pct_change": -0.21
+      },
+      "Net Income": {
+        "current": 29756.0,
+        "prior": 29922.0,
+        "change": -166.0,
+        "pct_change": -0.55
+      }
+    }
   ],
   "forecast": {
-    "next_month_label": "Aug 2026",
-    "forecast_income": 1090.00,
-    "forecast_expenses": 825.43,
-    "method": "3-month trailing average"
-  },
-  "budget_categories": [
-    { "name": "Income",        "type": "income",  "fixed": false, "budget": 3100.00, "actual": 3204.50 },
-    { "name": "Rent",          "type": "expense", "fixed": true,  "budget": 650.00,  "actual": 650.00 },
-    { "name": "Groceries",     "type": "expense", "fixed": false, "budget": 280.00,  "actual": 312.40 },
-    { "name": "Transport",     "type": "expense", "fixed": false, "budget": 110.00,  "actual": 96.20 },
-    { "name": "Subscriptions", "type": "expense", "fixed": false, "budget": 45.00,   "actual": 42.50 },
-    { "name": "Other",         "type": "expense", "fixed": false, "budget": 150.00,  "actual": 180.90 }
-  ],
-  "supplier_spend": {
-    "top_suppliers": [
-      { "name": "Supplier A — Facilities", "amount": 4820.00 },
-      { "name": "Supplier B — IT Services", "amount": 3210.00 },
-      { "name": "Supplier C — Consultancy", "amount": 2470.00 },
-      { "name": "Supplier D — Utilities", "amount": 1890.00 },
-      { "name": "Supplier E — Office Supplies", "amount": 1305.00 }
-    ],
-    "total_spend": 18915.00,
-    "total_suppliers": 47,
-    "top5_concentration_pct": 61.8
-  },
-  "commentary": "Income tracked slightly ahead of budget this month, driven by consistent freelance receipts. Groceries and other discretionary spend ran about 12% over budget \u2014 worth watching if the trend continues into August. Transport came in under budget following fewer rail journeys. Supplier spend remains fairly concentrated: the top 5 suppliers account for over 60% of total spend, which is a concentration risk worth flagging even at this small scale."
+    "forecast_year": 2026,
+    "method": "3-year trailing average",
+    "Revenue": 289272.67,
+    "Cost of Sales": 216238.0,
+    "Operating Expenses": 43597.67,
+    "Operating Income": 26059.0,
+    "Net Income": 30768.33
+  }
 }
