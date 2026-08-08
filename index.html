@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Shell plc — Real-Data FP&A Dashboard</title>
+<title>Shell plc — FP&A Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css?v=1"/>
@@ -22,12 +22,12 @@
 </nav>
 
 <section class="intro">
-  <p>A self-directed management accounting project analysing Shell plc's real 2021-2025 financial statements — built to practice and demonstrate FP&A skills: variance analysis, forecasting, and financial data storytelling using Python.</p>
+  <p>A self-directed management accounting project analysing Shell plc's 2021–2024 financial statements to practice and demonstrate FP&A skills: variance analysis, trailing-average forecasting, and automated management commentary using Python and AI.</p>
 </section>
 
 <header class="hero" id="overview">
-  <div class="hero__eyebrow">Real financial statements · Shell plc Annual Reports</div>
-  <h1 class="hero__title">Five years of Shell's real financial performance, analysed</h1>
+  <div class="hero__eyebrow"> Financial statements · Shell plc Annual Reports</div>
+  <h1 class="hero__title">Five year analysis of Shell plc's financial performance</h1>
   <div class="hero__counter" id="heroCounter">$0M</div>
   <div class="hero__sub">Net Income, FY<span id="heroYear"></span> · last updated <span id="generatedAt"></span></div>
 </header>
@@ -124,7 +124,19 @@
 </section>
 
 <footer>
-  Data source: <span id="dataSource"></span><br>
+   Data source: Shell plc Annual Reports (
+
+    <a href="https://www.shell.com/investors/results-and-reporting/annual-report-archive/_jcr_content/root/main/section_812377294/tabs/tab_338953895/text.multi.stream/1742905417223/ddb70e54fdb262fa1e81db12f2d92233672f779d/shell-annual-report-2021.pdf" target="_blank">2021</a>, 
+
+    <a href="https://www.shell.com/investors/results-and-reporting/annual-report-archive/_jcr_content/root/main/section_812377294/tabs/tab_1219767661/text.multi.stream/1742905354181/24ff673614687df7a13f18ce0cbd126cd73bc788/shell-annual-report-2022.pdf" target="_blank">2022</a>, 
+
+    <a href="https://www.shell.com/investors/results-and-reporting/annual-report-archive/_jcr_content/root/main/section_812377294/tabs/tab/text.multi.stream/1742905301176/ce28b952e201476287788cfcf35406e464f9785c/shell-annual-report-2023.pdf" target="_blank">2023</a>, 
+
+    <a href="https://www.shell.com/who-we-are/our-values/_jcr_content/root/main/section_874829968/list/list_item_copy.multi.stream/1752580693041/6c20b8111738b9a590ba145f0d1c4fa0e530dae0/shell-annual-report-2024.pdf" target="_blank">2024</a>,
+
+    <a href="https://www.shell.com/investors/results-and-reporting/annual-report.html" target="_blank">2025</a>
+
+  )<br>
   Built with <code>pandas</code> + <code>Chart.js</code> · hosted on GitHub Pages<br>
   <p>Built by Sai Pranav Kallakuri — <a href="https://linkedin.com/in/sai-pranav-kallakuri">LinkedIn</a></p>
 </footer>
