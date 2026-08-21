@@ -6,7 +6,7 @@
 <title>Shell plc — FP&A Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=1"/>
+<link rel="stylesheet" href="style.css?v=2"/>
 </head>
 <body>
 
@@ -19,127 +19,128 @@
     <li><a href="#forecast">Forecast</a></li>
     <li><a href="#whatif">What-if</a></li>
   </ul>
+  <img class="nav__logo" src="images/shell-logo.png" alt="Shell plc">
 </nav>
 
-<section class="intro">
-  <p>A self-directed management accounting project analysing Shell plc's 2021–2024 financial statements to practice and demonstrate FP&A skills: variance analysis, trailing-average forecasting, and automated management commentary using Python and AI.</p>
-</section>
+<div class="zone-white">
+  <section class="intro">
+    <p>A self-directed management accounting project analysing Shell plc's 2021–2024 financial statements to practice and demonstrate FP&A skills: variance analysis, trailing-average forecasting, and automated management commentary using Python and AI.</p>
+  </section>
 
-<header class="hero" id="overview">
-  <div class="hero__eyebrow"> Financial statements · Shell plc Annual Reports</div>
-  <h1 class="hero__title">Five year analysis of Shell plc's financial performance</h1>
-  <div class="hero__counter" id="heroCounter">$0M</div>
-  <div class="hero__sub">Net Income, FY<span id="heroYear"></span> · last updated <span id="generatedAt"></span></div>
-</header>
+  <header class="hero" id="overview">
+    <div class="hero__eyebrow"> Financial statements · Shell plc Annual Reports</div>
+    <h1 class="hero__title">Five year analysis of Shell plc's financial performance</h1>
+    <div class="hero__counter" id="heroCounter">$0M</div>
+    <div class="hero__sub">Net Income, FY<span id="heroYear"></span> · last updated <span id="generatedAt"></span></div>
+  </header>
 
-<section aria-label="Key figures">
-  <div class="section__label">Overview</div>
-  <h2 class="section__title">Latest year at a glance</h2>
-  <div class="kpi-grid">
-    <div class="card">
-      <div class="kpi__label">Revenue</div>
-      <div class="kpi__value positive" id="kpiRevenue">—</div>
+  <section aria-label="Key figures">
+    <div class="section__label">Overview</div>
+    <h2 class="section__title">Latest year at a glance</h2>
+    <div class="kpi-grid">
+      <div class="card">
+        <div class="kpi__label">Revenue</div>
+        <div class="kpi__value positive" id="kpiRevenue">—</div>
+      </div>
+      <div class="card">
+        <div class="kpi__label">Cost of Sales</div>
+        <div class="kpi__value negative" id="kpiCos">—</div>
+      </div>
+      <div class="card">
+        <div class="kpi__label">Operating Expenses</div>
+        <div class="kpi__value negative" id="kpiOpex">—</div>
+      </div>
+      <div class="card">
+        <div class="kpi__label">Operating Income</div>
+        <div class="kpi__value neutral" id="kpiOpIncome">—</div>
+      </div>
     </div>
-    <div class="card">
-      <div class="kpi__label">Cost of Sales</div>
-      <div class="kpi__value negative" id="kpiCos">—</div>
+    <div class="card commentary-card">
+      <div class="kpi__label">Management commentary</div>
+      <p id="commentaryText" class="commentary-text"></p>
     </div>
-    <div class="card">
-      <div class="kpi__label">Operating Expenses</div>
-      <div class="kpi__value negative" id="kpiOpex">—</div>
+  </section>
+
+  <section id="trend" aria-label="5-year trend">
+    <div class="section__label">Trend</div>
+    <h2 class="section__title">Revenue, cost of sales &amp; opex, 2021-2025</h2>
+    <div class="chart-card"><canvas id="trendChart"></canvas></div>
+  </section>
+</div>
+
+<div class="zone-yellow">
+  <section id="variance" aria-label="Year over year variance">
+    <div class="section__label">Variance</div>
+    <h2 class="section__title">Year-over-year change</h2>
+    <div class="chart-row">
+      <div class="chart-card"><canvas id="varianceChart"></canvas></div>
+      <div class="chart-card">
+        <table>
+          <thead><tr><th>Period</th><th class="amount">Revenue</th><th class="amount">Δ Revenue</th><th class="amount">Net Income</th><th class="amount">Δ Net Income</th></tr></thead>
+          <tbody id="varianceTableBody"></tbody>
+        </table>
+      </div>
     </div>
-    <div class="card">
-      <div class="kpi__label">Operating Income</div>
-      <div class="kpi__value neutral" id="kpiOpIncome">—</div>
+  </section>
+
+  <section id="forecast" aria-label="Next year forecast">
+    <div class="section__label">Forecast</div>
+    <h2 class="section__title">FY<span id="forecastLabel"></span> projection</h2>
+    <div class="kpi-grid">
+      <div class="card forecast-card">
+        <div class="kpi__label">Forecast Revenue</div>
+        <div class="kpi__value positive" id="forecastRevenue">—</div>
+      </div>
+      <div class="card forecast-card">
+        <div class="kpi__label">Forecast Operating Income</div>
+        <div class="kpi__value neutral" id="forecastOpIncome">—</div>
+      </div>
+      <div class="card forecast-card">
+        <div class="kpi__label">Forecast Net Income</div>
+        <div class="kpi__value neutral" id="forecastNetIncome">—</div>
+      </div>
     </div>
-  </div>
-  <div class="card commentary-card">
-    <div class="kpi__label">Management commentary</div>
-    <p id="commentaryText" class="commentary-text"></p>
-  </div>
-</section>
+    <p class="method-note">Method: <span id="forecastMethod"></span></p>
+  </section>
+</div>
 
-<section id="trend" aria-label="5-year trend">
-  <div class="section__label">Trend</div>
-  <h2 class="section__title">Revenue, cost of sales &amp; opex, 2021-2025</h2>
-  <div class="chart-card"><canvas id="trendChart"></canvas></div>
-</section>
-
-<section id="variance" aria-label="Year over year variance">
-  <div class="section__label">Variance</div>
-  <h2 class="section__title">Year-over-year change</h2>
-  <div class="chart-row">
-    <div class="chart-card"><canvas id="varianceChart"></canvas></div>
-    <div class="chart-card">
-      <table>
-        <thead><tr><th>Period</th><th class="amount">Revenue</th><th class="amount">Δ Revenue</th><th class="amount">Net Income</th><th class="amount">Δ Net Income</th></tr></thead>
-        <tbody id="varianceTableBody"></tbody>
-      </table>
+<div class="zone-red">
+  <section id="whatif" aria-label="What-if calculator">
+    <div class="section__label">Interactive</div>
+    <h2 class="section__title">What-if calculator</h2>
+    <div class="card whatif-card">
+      <div class="slider-row">
+        <label for="revenueSlider">Revenue <span id="revenueSliderVal">+0%</span></label>
+        <input type="range" id="revenueSlider" min="-20" max="20" value="0" step="1">
+      </div>
+      <div class="slider-row">
+        <label for="cosSlider">Cost of Sales <span id="cosSliderVal">+0%</span></label>
+        <input type="range" id="cosSlider" min="-20" max="20" value="0" step="1">
+      </div>
+      <div class="slider-row">
+        <label for="opexSlider">Operating Expenses <span id="opexSliderVal">+0%</span></label>
+        <input type="range" id="opexSlider" min="-20" max="20" value="0" step="1">
+      </div>
+      <div class="whatif-result">
+        <div class="kpi__label">Projected Operating Income</div>
+        <div class="kpi__value neutral" id="whatIfResult">—</div>
+        <div class="kpi__value positive" id="whatIfDelta" style="font-size:1rem; margin-top:4px;"></div>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="forecast" aria-label="Next year forecast">
-  <div class="section__label">Forecast</div>
-  <h2 class="section__title">FY<span id="forecastLabel"></span> projection</h2>
-  <div class="kpi-grid">
-    <div class="card forecast-card">
-      <div class="kpi__label">Forecast Revenue</div>
-      <div class="kpi__value positive" id="forecastRevenue">—</div>
-    </div>
-    <div class="card forecast-card">
-      <div class="kpi__label">Forecast Operating Income</div>
-      <div class="kpi__value neutral" id="forecastOpIncome">—</div>
-    </div>
-    <div class="card forecast-card">
-      <div class="kpi__label">Forecast Net Income</div>
-      <div class="kpi__value neutral" id="forecastNetIncome">—</div>
-    </div>
-  </div>
-  <p class="method-note">Method: <span id="forecastMethod"></span></p>
-</section>
-
-<section id="whatif" aria-label="What-if calculator">
-  <div class="section__label">Interactive</div>
-  <h2 class="section__title">What-if calculator</h2>
-  <div class="card whatif-card">
-    <div class="slider-row">
-      <label for="revenueSlider">Revenue <span id="revenueSliderVal">+0%</span></label>
-      <input type="range" id="revenueSlider" min="-20" max="20" value="0" step="1">
-    </div>
-    <div class="slider-row">
-      <label for="cosSlider">Cost of Sales <span id="cosSliderVal">+0%</span></label>
-      <input type="range" id="cosSlider" min="-20" max="20" value="0" step="1">
-    </div>
-    <div class="slider-row">
-      <label for="opexSlider">Operating Expenses <span id="opexSliderVal">+0%</span></label>
-      <input type="range" id="opexSlider" min="-20" max="20" value="0" step="1">
-    </div>
-    <div class="whatif-result">
-      <div class="kpi__label">Projected Operating Income</div>
-      <div class="kpi__value neutral" id="whatIfResult">—</div>
-      <div class="kpi__value positive" id="whatIfDelta" style="font-size:1rem; margin-top:4px;"></div>
-    </div>
-  </div>
-</section>
-
-<footer>
-   Data source: Shell plc Annual Reports (
-
-    <a href="https://www.shell.com/investors/results-and-reporting/annual-report-archive/_jcr_content/root/main/section_812377294/tabs/tab_338953895/text.multi.stream/1742905417223/ddb70e54fdb262fa1e81db12f2d92233672f779d/shell-annual-report-2021.pdf" target="_blank">2021</a>, 
-
-    <a href="https://www.shell.com/investors/results-and-reporting/annual-report-archive/_jcr_content/root/main/section_812377294/tabs/tab_1219767661/text.multi.stream/1742905354181/24ff673614687df7a13f18ce0cbd126cd73bc788/shell-annual-report-2022.pdf" target="_blank">2022</a>, 
-
-    <a href="https://www.shell.com/investors/results-and-reporting/annual-report-archive/_jcr_content/root/main/section_812377294/tabs/tab/text.multi.stream/1742905301176/ce28b952e201476287788cfcf35406e464f9785c/shell-annual-report-2023.pdf" target="_blank">2023</a>, 
-
-    <a href="https://www.shell.com/who-we-are/our-values/_jcr_content/root/main/section_874829968/list/list_item_copy.multi.stream/1752580693041/6c20b8111738b9a590ba145f0d1c4fa0e530dae0/shell-annual-report-2024.pdf" target="_blank">2024</a>,
-
-    <a href="https://www.shell.com/investors/results-and-reporting/annual-report.html" target="_blank">2025</a>
-
-  )<br>
-  Built with <code>pandas</code> + <code>Chart.js</code> · hosted on GitHub Pages<br>
-  <p>Built by Sai Pranav Kallakuri — <a href="https://www.linkedin.com/in/sai-pranav-kallakuri-2441a51b5">LinkedIn</a></p>
-</footer>
+  <footer>
+     Data source: Shell plc Annual Reports (
+      <a href="https://www.shell.com/investors/results-and-reporting/annual-report-archive/_jcr_content/root/main/section_812377294/tabs/tab_338953895/text.multi.stream/1742905417223/ddb70e54fdb262fa1e81db12f2d92233672f779d/shell-annual-report-2021.pdf" target="_blank">2021</a>,
+      <a href="https://www.shell.com/investors/results-and-reporting/annual-report-archive/_jcr_content/root/main/section_812377294/tabs/tab_1219767661/text.multi.stream/1742905354181/24ff673614687df7a13f18ce0cbd126cd73bc788/shell-annual-report-2022.pdf" target="_blank">2022</a>,
+      <a href="https://www.shell.com/investors/results-and-reporting/annual-report-archive/_jcr_content/root/main/section_812377294/tabs/tab/text.multi.stream/1742905301176/ce28b952e201476287788cfcf35406e464f9785c/shell-annual-report-2023.pdf" target="_blank">2023</a>,
+      <a href="https://www.shell.com/who-we-are/our-values/_jcr_content/root/main/section_874829968/list/list_item_copy.multi.stream/1752580693041/6c20b8111738b9a590ba145f0d1c4fa0e530dae0/shell-annual-report-2024.pdf" target="_blank">2024</a>,
+      <a href="https://www.shell.com/investors/results-and-reporting/annual-report.html" target="_blank">2025</a>
+    )<br>
+    Built with <code>pandas</code> + <code>Chart.js</code> · hosted on GitHub Pages<br>
+    <p>Built by Sai Pranav Kallakuri — <a href="https://www.linkedin.com/in/sai-pranav-kallakuri-2441a51b5">LinkedIn</a></p>
+  </footer>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
 <script src="script.js"></script>

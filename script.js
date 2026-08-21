@@ -23,16 +23,16 @@ function chartOptions() {
   return {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: { legend: { labels: { color: "#a9a89c", font: { family: "IBM Plex Mono", size: 11 } } } },
+    plugins: { legend: { labels: { color: "#5a6472", font: { family: "IBM Plex Mono", size: 11 } } } },
     scales: {
-      x: { ticks: { color: "#a9a89c", font: { family: "IBM Plex Mono", size: 10 } }, grid: { color: "#2a3240" } },
-      y: { ticks: { color: "#a9a89c", font: { family: "IBM Plex Mono", size: 10 } }, grid: { color: "#2a3240" } },
+      x: { ticks: { color: "#5a6472", font: { family: "IBM Plex Mono", size: 10 } }, grid: { color: "#e4e2dc" } },
+      y: { ticks: { color: "#5a6472", font: { family: "IBM Plex Mono", size: 10 } }, grid: { color: "#e4e2dc" } },
     },
   };
 }
 
 async function loadDashboard() {
-  const res = await fetch("data/summary.json?v=" + Date.now());
+  const res = await fetch("data/summary.json");
   const data = await res.json();
   const latest = data.yearly_data[data.yearly_data.length - 1];
 
