@@ -130,3 +130,27 @@ async function loadDashboard() {
 }
 
 loadDashboard();
+
+// --- Seamless Background Color Scroll Transition ---
+const zones = document.querySelectorAll('.zone-white, .zone-yellow, .zone-red');
+
+const bgObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    // When a section scrolls into the middle of the viewport
+    if (entry.isIntersecting) {
+      if (entry.target.classList.contains('zone-white')) {
+        document.body.style.backgroundColor = '#ffffff';
+      } else if (entry.target.classList.contains('zone-yellow')) {
+        document.body.style.backgroundColor = '#fbce07'; // Shell Yellow
+      } else if (entry.target.classList.contains('zone-red')) {
+        document.body.style.backgroundColor = '#dd1d21'; // Shell Red
+      }
+    }
+  });
+}, {
+  // Triggers the color change when a zone covers at least 40% of the screen
+  threshold: 0.4 
+});
+
+// Start watching all zones
+zones.forEach(zone => bgObserver.observe(zone));
